@@ -30,11 +30,12 @@ export default function SignupPage() {
     }
 
     try {
-      const name = `${firstName} ${lastName}`.trim();
       await register({
         email,
         password,
-        name,
+        password_confirm: passwordConfirm,
+        first_name: firstName,
+        last_name: lastName,
       });
       router.push('/dashboard');
     } catch (err) {

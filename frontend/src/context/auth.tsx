@@ -99,13 +99,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const session = await authClient.getSession();
+        const session = await authClient.session();
         if (session?.data?.user) {
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: {
               user: session.data.user,
-              token: session.data.session?.token || null,
+              token: session.data.session?.id || null,
             },
           });
         }
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           type: 'AUTH_SUCCESS',
           payload: {
             user: result.data.user,
-            token: result.data.session?.token || null,
+            token: result.data.session?.id || null,
           },
         });
         router.push('/dashboard');
@@ -153,15 +153,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (userData: {
     email: string;
     password: string;
-    name: string;
+    password_confirm: string;
+    first_name?: string;
+    last_name?: string;
   }) => {
     dispatch({ type: 'AUTH_START' });
 
     try {
+      const name = [userData.first_name, userData.last_name].filter(Boolean).join(' ') || userData.email;
       const result = await authClient.signUp.email({
         email: userData.email,
         password: userData.password,
-        name: userData.name,
+        name,
       });
 
       if (result.error) {
@@ -173,7 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           type: 'AUTH_SUCCESS',
           payload: {
             user: result.data.user,
-            token: result.data.session?.token || null,
+            token: result.data.session?.id || null,
           },
         });
         router.push('/dashboard');
