@@ -208,3 +208,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- Python 3.11+ + FastAPI, SQLModel, python-jose (JWT), asyncpg/psycopg2 (002-fastapi-backend)
+- Neon Serverless PostgreSQL (shared with frontend) (002-fastapi-backend)
+
+## Recent Changes
+- 002-fastapi-backend: Added Python 3.11+ + FastAPI, SQLModel, python-jose (JWT), asyncpg/psycopg2
