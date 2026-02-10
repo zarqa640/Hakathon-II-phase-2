@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/auth';
@@ -10,10 +10,15 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [error, setError] = useState('');
   const { register, state } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    if (state.user) {
+      router.push('/dashboard');
+    }
+  }, [state.user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +40,6 @@ export default function SignupPage() {
         password,
         password_confirm: passwordConfirm,
         first_name: firstName,
-        last_name: lastName,
       });
       router.push('/dashboard');
     } catch (err) {
@@ -44,7 +48,6 @@ export default function SignupPage() {
   };
 
   if (state.user) {
-    router.push('/dashboard');
     return null;
   }
 
@@ -66,36 +69,20 @@ export default function SignupPage() {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" defaultValue="true" />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
-                First Name
-              </label>
-              <input
-                id="first-name"
-                name="first-name"
-                type="text"
-                required
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="First name"
-              />
-            </div>
-            <div>
-              <label htmlFor="last-name" className="block text-sm font-medium text-gray-700">
-                Last Name
-              </label>
-              <input
-                id="last-name"
-                name="last-name"
-                type="text"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Last name"
-              />
-            </div>
+          <div>
+            <label htmlFor="first-name" className="block text-sm font-medium text-gray-700">
+              Name
+            </label>
+            <input
+              id="first-name"
+              name="first-name"
+              type="text"
+              required
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Your name"
+            />
           </div>
 
           <div className="rounded-md shadow-sm -space-y-px">
