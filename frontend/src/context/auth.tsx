@@ -99,13 +99,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const session = await authClient.session();
+        const session = await authClient.getSession();
         if (session?.data?.user) {
           dispatch({
             type: 'AUTH_SUCCESS',
             payload: {
               user: session.data.user,
-              token: session.data.session?.id || null,
+              token: session.data.session?.token || null,
             },
           });
         }
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           type: 'AUTH_SUCCESS',
           payload: {
             user: result.data.user,
-            token: result.data.session?.id || null,
+            token: result.data.token || null,
           },
         });
         router.push('/dashboard');
@@ -176,7 +176,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           type: 'AUTH_SUCCESS',
           payload: {
             user: result.data.user,
-            token: result.data.session?.id || null,
+            token: result.data.token || null,
           },
         });
         router.push('/dashboard');
